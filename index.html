@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Auth - Login & Signup</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJzL3HzzZ7W9nU+GZtIu1uX+F9A/XoT9U9z3M4x2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Main Form Card Container -->
+    <div class="neon-card w-full max-w-4xl rounded-xl flex flex-col md:flex-row shadow-2xl">
+        
+        <!-- Left Panel: Welcome/Info Section (Gradient) - Changes based on mode -->
+        <div id="left-panel" class="left-panel bg-gradient-to-br from-cyan-600 to-blue-900 
+                    p-10 text-white flex-1 md:w-2/5 
+                    diagonal-clip-left hidden md:block">
+            <div class="flex flex-col justify-center h-full pr-10">
+                <h1 id="left-title" class="text-4xl lg:text-5xl font-extrabold mb-4 tracking-wider">
+                    HELLO <br> AGAIN!
+                </h1>
+                <p id="left-desc" class="text-gray-200 text-sm">
+                    Access your account with your credentials to continue your journey.
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Panel: Auth Forms -->
+        <div class="right-panel flex-1 p-8 sm:p-12 md:w-3/5">
+            
+            <!-- Toggle between Login and Signup -->
+            <div class="toggle-container">
+                <button id="login-toggle" class="toggle-btn active" onclick="switchToLogin()">
+                    Login
+                </button>
+                <button id="signup-toggle" class="toggle-btn" onclick="switchToSignup()">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="form-section">
+                <h2 class="text-3xl font-bold text-white mb-10 text-left">
+                    Login
+                </h2>
+
+                <form class="space-y-6" onsubmit="handleLogin(event)">
+                    <!-- Email/Username Input -->
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="login-username" placeholder="Username or Email" required>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="Password" required>
+                    </div>
+
+                    <!-- Forgot Password Link -->
+                    <div class="text-right -mt-2 mb-8">
+                        <a href="#" class="text-xs text-gray-400 hover:text-cyan-400 transition duration-200">
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <div>
+                        <button type="submit" class="gradient-button 
+                            w-full p-3 rounded-full text-lg font-semibold text-white 
+                            focus:outline-none focus:ring-4 focus:ring-cyan-500 focus:ring-opacity-50">
+                            Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="form-section hidden">
+                <h2 class="text-3xl font-bold text-white mb-10 text-left">
+                    Sign Up
+                </h2>
+
+                <form class="space-y-6" onsubmit="handleSignup(event)">
+                    <!-- Full Name Input -->
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="signup-name" placeholder="Full Name" required>
+                    </div>
+
+                    <!-- Email Input -->
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="signup-email" placeholder="Email" required>
+                    </div>
+
+                    <!-- Username Input -->
+                    <div class="input-group">
+                        <i class="fas fa-user-circle"></i>
+                        <input type="text" id="signup-username" placeholder="Username" required>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="signup-password" placeholder="Password" required>
+                    </div>
+
+                    <!-- Confirm Password Input -->
+                    <div class="input-group">
+                        <i class="fas fa-lock-open"></i>
+                        <input type="password" id="signup-confirm-password" placeholder="Confirm Password" required>
+                    </div>
+
+                    <!-- Terms Checkbox -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" class="text-sm text-gray-300 cursor-pointer select-none">
+                            I agree to the <a href="#" class="text-cyan-400 hover:text-cyan-300">Terms and Conditions</a>
+                        </label>
+                    </div>
+
+                    <!-- Signup Button -->
+                    <div>
+                        <button type="submit" class="gradient-button 
+                            w-full p-3 rounded-full text-lg font-semibold text-white 
+                            focus:outline-none focus:ring-4 focus:ring-cyan-500 focus:ring-opacity-50">
+                            Sign Up
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Dynamic Link (Login or Signup) -->
+            <p id="auth-link" class="mt-8 text-sm text-right text-gray-400">
+                Already have an account? 
+                <a href="#" id="switch-link" class="text-cyan-400 font-semibold hover:text-cyan-300 transition duration-200" onclick="switchToLogin()">
+                    Login
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Function to switch to Login mode
+        function switchToLogin() {
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('signup-form').classList.add('hidden');
+            
+            document.getElementById('login-toggle').classList.add('active');
+            document.getElementById('signup-toggle').classList.remove('active');
+            
+            document.getElementById('left-title').innerHTML = 'HELLO <br> AGAIN!';
+            document.getElementById('left-desc').textContent = 'Access your account with your credentials to continue your journey.';
+            
+            document.getElementById('auth-link').innerHTML = 'Already have an account? <a href="#" id="switch-link" class="text-cyan-400 font-semibold hover:text-cyan-300 transition duration-200" onclick="switchToSignup()">Sign Up</a>';
+            document.getElementById('switch-link').onclick = switchToSignup;
+        }
+
+        // Function to switch to Signup mode
+        function switchToSignup() {
+            document.getElementById('signup-form').classList.remove('hidden');
+            document.getElementById('login-form').classList.add('hidden');
+            
+            document.getElementById('signup-toggle').classList.add('active');
+            document.getElementById('login-toggle').classList.remove('active');
+            
+            document.getElementById('left-title').innerHTML = 'WELCOME <br> ABOARD!';
+            document.getElementById('left-desc').textContent = 'Create your account to start your journey with us.';
+            
+            document.getElementById('auth-link').innerHTML = "Don't have an account? <a href='#' id='switch-link' class='text-cyan-400 font-semibold hover:text-cyan-300 transition duration-200' onclick='switchToLogin()'>Login</a>";
+            document.getElementById('switch-link').onclick = switchToLogin;
+        }
+
+        // Placeholder form handlers (replace with actual logic, e.g., API calls)
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            alert(`Login attempt: Username/Email: ${username}, Password: ${password}`); // Demo - replace with real auth
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            alert(`Signup attempt: Name: ${name}, Email: ${email}, Username: ${username}, Password: ${password}`); // Demo - replace with real signup
+        }
+    </script>
+
+</body>
+</html>
